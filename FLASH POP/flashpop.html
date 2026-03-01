@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLASH POP</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07070d;
+  --s1:#0c0c16;
+  --s2:#111120;
+  --card:#13131f;
+  --bdr:#1f1f32;
+  --bdr2:#2a2a42;
+  --easy:#00e5a0;
+  --avg:#f5c400;
+  --hard:#ff4d6d;
+  --tb:#a78bfa;
+  --pu:#ff6b35;
+  --txt:#eef0ff;
+  --dim:#484880;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{min-height:100%;}
+body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;}
+
+/* grid bg */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,229,160,.014) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,160,.014) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+
+/* ═══════════════════════ HEADER ═══════════════════════ */
+.hdr{
+  position:sticky;top:0;z-index:10;
+  background:var(--s1);
+  border-bottom:1px solid var(--bdr);
+  padding:0 24px;
+  height:52px;
+  display:flex;align-items:center;gap:18px;
+}
+.logo{
+  font-family:'Black Ops One',cursive;font-size:22px;letter-spacing:7px;
+  background:linear-gradient(110deg,#00e5a0 0%,#a78bfa 48%,#ff4d6d 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  flex-shrink:0;filter:drop-shadow(0 0 14px rgba(0,229,160,.3));
+}
+.hdiv{width:1px;height:22px;background:var(--bdr2);flex-shrink:0;}
+.badges{display:flex;gap:5px;}
+.bdg{
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;border:1px solid currentColor;white-space:nowrap;
+  opacity:.8;transition:opacity .15s;
+}
+.bdg:hover{opacity:1;}
+.bdg.e{color:var(--easy);}.bdg.a{color:var(--avg);}.bdg.h{color:var(--hard);}.bdg.t{color:var(--tb);}
+.hdr-actions{display:flex;gap:6px;margin-left:auto;}
+.btn{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:6px 16px;border:1px solid var(--bdr2);border-radius:20px;
+  cursor:pointer;background:transparent;color:var(--txt);white-space:nowrap;
+  transition:all .18s;
+}
+.btn:hover{border-color:currentColor;filter:brightness(1.3);transform:translateY(-1px);}
+.btn:active{transform:translateY(0);}
+.btn:disabled{opacity:.25;cursor:default;transform:none;filter:none;}
+.btn.g{color:var(--easy);}
+.btn.r{color:var(--hard);}
+.btn.p{color:var(--tb);}
+.btn.solid-g{background:var(--easy);color:#000;border-color:var(--easy);}
+.btn.solid-r{background:var(--hard);color:#fff;border-color:var(--hard);}
+
+/* ═══════════════════════ SCOREBOARD ═══════════════════════ */
+.scores{
+  position:relative;z-index:9;
+  background:var(--s1);border-bottom:1px solid var(--bdr);
+  padding:8px 24px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+}
+.tslot{
+  background:var(--card);
+  border:1px solid var(--bdr);
+  border-radius:10px;
+  padding:8px 12px;
+  display:grid;
+  grid-template-columns:28px 1fr 28px;
+  align-items:center;
+  gap:8px;
+  transition:border-color .2s;
+}
+.tslot:hover{border-color:var(--bdr2);}
+.tadj-btn{
+  background:var(--bdr);border:none;color:var(--txt);
+  font-family:'Black Ops One',cursive;font-size:14px;
+  width:28px;height:28px;border-radius:6px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .14s,color .14s,transform .12s;
+  flex-shrink:0;
+}
+.tadj-btn:hover{transform:scale(1.12);}
+.tadj-btn.minus:hover{background:var(--hard);color:#fff;}
+.tadj-btn.plus:hover{background:var(--easy);color:#000;}
+.tcenter{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;}
+.tscore{
+  font-family:'Black Ops One',cursive;font-size:28px;color:var(--easy);
+  line-height:1;transition:transform .15s;
+}
+.tname{
+  background:transparent;border:none;border-bottom:1px solid transparent;
+  color:var(--dim);font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
+  outline:none;text-align:center;width:100%;padding:0;
+  transition:color .2s,border-color .2s;
+}
+.tname:focus{color:var(--txt);border-bottom-color:var(--easy);}
+.tname::placeholder{color:var(--bdr2);}
+
+/* ═══════════════════════ BOARD ═══════════════════════ */
+.board{position:relative;z-index:1;padding:16px 24px 36px;}
+.sec{margin-bottom:14px;}
+.sec-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.sec-pts{font-family:'Black Ops One',cursive;font-size:18px;letter-spacing:0;}
+.sec-pts.e{color:var(--easy);text-shadow:0 0 16px rgba(0,229,160,.4);}
+.sec-pts.a{color:var(--avg);text-shadow:0 0 16px rgba(245,196,0,.4);}
+.sec-pts.h{color:var(--hard);text-shadow:0 0 16px rgba(255,77,109,.4);}
+.sec-pts.t{color:var(--tb);text-shadow:0 0 16px rgba(167,139,250,.4);}
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--dim);}
+.sec-line{flex:1;height:1px;background:var(--bdr);}
+.cards{display:flex;flex-wrap:wrap;gap:7px;}
+
+/* ═══════════════════════ CARD ═══════════════════════ */
+.card{
+  width:74px;height:92px;
+  background:var(--card);
+  border:1px solid var(--bdr);
+  border-radius:8px;
+  cursor:pointer;user-select:none;flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  transition:transform .14s cubic-bezier(.34,1.56,.64,1),
+             border-color .14s,box-shadow .14s,opacity .3s;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--ca);
+  box-shadow:0 0 8px var(--ca);
+}
+.card.e{--ca:var(--easy);}
+.card.a{--ca:var(--avg);}
+.card.h{--ca:var(--hard);}
+.card.t{--ca:var(--tb);}
+.card:hover:not(.used){
+  transform:translateY(-5px) scale(1.06);
+  border-color:var(--ca);
+  box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 0 1px var(--ca)33;
+}
+.card.used{opacity:.15;pointer-events:none;}
+.card.used::after{
+  content:'✓';position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Black Ops One',cursive;font-size:32px;color:var(--easy);
+  background:rgba(0,0,0,.45);
+}
+.cnum{font-family:'Black Ops One',cursive;font-size:23px;color:var(--ca);line-height:1;text-shadow:0 0 12px var(--ca)88;}
+.cpt{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-top:3px;}
+.ctr{font-size:7px;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;position:absolute;bottom:6px;}
+
+/* ═══════════════════════ OVERLAY ═══════════════════════ */
+.overlay{
+  position:fixed;inset:0;z-index:999;
+  background:rgba(4,4,10,.95);
+  backdrop-filter:blur(20px) saturate(1.4);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.overlay.on{display:flex;}
+
+/* ═══════════════════════ MODAL ═══════════════════════ */
+.modal{
+  background:var(--s2);
+  border:1.5px solid var(--mc,var(--bdr));
+  border-radius:18px;overflow:hidden;
+  width:min(640px,96vw);
+  max-height:min(88vh,740px);
+  display:flex;flex-direction:column;
+  box-shadow:0 0 0 1px var(--mc,var(--bdr))22,
+             0 32px 80px rgba(0,0,0,.8),
+             0 0 120px var(--mc,#a78bfa)20;
+  animation:mpop .3s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+}
+@keyframes mpop{
+  0%{transform:scale(.55) translateY(40px);opacity:0;}
+  100%{transform:none;opacity:1;}
+}
+.modal-top-bar{
+  height:3px;
+  background:linear-gradient(90deg,var(--mc,var(--easy)) 0%,color-mix(in srgb,var(--mc,var(--easy)) 60%,#fff) 50%,var(--mc,var(--easy)) 100%);
+  flex-shrink:0;
+  animation:shimmer 2s linear infinite;
+  background-size:200% 100%;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.mclose{
+  position:absolute;top:12px;right:12px;z-index:20;
+  background:var(--bdr);border:1px solid var(--bdr2);color:var(--dim);
+  width:30px;height:30px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+  transition:all .15s;
+}
+.mclose:hover{background:var(--hard);color:#fff;border-color:var(--hard);transform:rotate(90deg);}
+
+/* PHOTO ZONE */
+.mphoto{
+  flex:1;min-height:0;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.mphoto img{
+  width:100%;height:100%;object-fit:contain;padding:16px;
+  transition:opacity .3s;
+}
+.mphoto .nophoto{
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--bdr2);text-align:center;
+}
+/* subtle vignette on photo */
+.mphoto::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(7,7,13,.7) 100%);
+}
+/* card badge overlay */
+.mbadge{
+  position:absolute;top:14px;left:14px;z-index:2;
+  background:rgba(7,7,13,.75);
+  backdrop-filter:blur(8px);
+  border:1px solid var(--mc,var(--bdr));
+  border-radius:10px;padding:6px 14px;
+  display:flex;flex-direction:column;gap:1px;
+}
+.mbadge-num{
+  font-family:'Black Ops One',cursive;font-size:30px;
+  color:var(--mc,var(--easy));line-height:1;
+  text-shadow:0 0 20px var(--mc,var(--easy))88;
+}
+.mbadge-meta{
+  font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dim);
+}
+
+/* BOTTOM PANEL */
+.mbottom{
+  flex-shrink:0;
+  background:var(--s1);
+  border-top:1px solid var(--bdr);
+  padding:14px 18px;
+  display:grid;
+  grid-template-columns:80px 1fr auto;
+  align-items:center;
+  gap:16px;
+}
+
+/* Ring */
+.rw{position:relative;width:80px;height:80px;flex-shrink:0;}
+.rw svg{transform:rotate(-90deg);display:block;}
+.rbg{fill:none;stroke:var(--bdr2);stroke-width:5;}
+.rf{
+  fill:none;stroke:var(--mc,var(--easy));stroke-width:5;stroke-linecap:round;
+  transition:stroke-dashoffset 1s linear,stroke .5s;
+  filter:drop-shadow(0 0 4px var(--mc,var(--easy)));
+}
+.rn{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Black Ops One',cursive;font-size:24px;color:var(--mc,var(--easy));
+  text-shadow:0 0 16px var(--mc,var(--easy));
+}
+.rw.tu .rf{stroke:#ff4d6d!important;filter:drop-shadow(0 0 6px #ff4d6d);}
+.rw.tu .rn{color:#ff4d6d!important;text-shadow:0 0 16px #ff4d6d;}
+
+/* Middle: status + answer + powerup */
+.mmid{display:flex;flex-direction:column;gap:8px;min-width:0;}
+.mstatus{
+  font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--dim);transition:color .3s;
+}
+.mstatus.alert{color:#ff4d6d;animation:pulse .7s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.mansbox{
+  background:var(--card);border:1px solid var(--bdr);border-radius:8px;
+  padding:10px 16px;display:flex;align-items:center;justify-content:center;min-height:48px;
+  transition:border-color .3s,box-shadow .3s;
+}
+.mansbox.revealed{border-color:var(--mc,var(--easy));box-shadow:0 0 16px var(--mc,var(--easy))22;}
+.mans-hint{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--bdr2);}
+.mans-text{font-size:24px;font-weight:700;letter-spacing:2px;display:none;text-align:center;}
+.mpubanner{
+  background:var(--pu);color:#000;
+  font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:8px 14px;border-radius:7px;text-align:center;
+  display:none;
+  box-shadow:0 4px 20px var(--pu)55;
+  animation:pupp .35s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pupp{0%{transform:scale(.7) translateY(8px);opacity:0}100%{transform:none;opacity:1}}
+
+/* Action btns column */
+.mbtns{display:flex;flex-direction:column;gap:6px;min-width:116px;}
+.mbtns .btn{padding:8px 12px;font-size:10px;letter-spacing:2px;text-align:center;border-radius:8px;width:100%;}
+.btn-steal{color:#f5c400;border-color:rgba(245,196,0,.3);}
+.btn-steal:hover{background:rgba(245,196,0,.1);border-color:#f5c400;box-shadow:0 0 16px rgba(245,196,0,.2);}
+
+/* ═══════════════════════ EFFECTS ═══════════════════════ */
+.tuflash{
+  position:fixed;inset:0;z-index:800;pointer-events:none;
+  animation:tuf .9s ease forwards;
+}
+@keyframes tuf{
+  0%{background:radial-gradient(ellipse at center,rgba(255,77,109,.35) 0%,transparent 65%);opacity:1;}
+  100%{background:radial-gradient(ellipse at center,rgba(255,77,109,.35) 0%,transparent 65%);opacity:0;}
+}
+
+/* score pop animation */
+.score-pop{animation:spop .35s cubic-bezier(.34,1.56,.64,1);}
+@keyframes spop{0%{transform:scale(.7)}100%{transform:scale(1)}}
+
+/* reveal glow */
+.ans-reveal-flash{
+  position:fixed;inset:0;z-index:800;pointer-events:none;
+  animation:arf .5s ease forwards;
+}
+@keyframes arf{
+  0%{background:rgba(0,229,160,.06);opacity:1;}
+  100%{opacity:0;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="logo">FLASH POP</div>
+  <div class="hdiv"></div>
+  <div class="badges">
+    <span class="bdg e">⚡ 1 PT · 10s</span>
+    <span class="bdg a">🔥 3 PT · 15s</span>
+    <span class="bdg h">💀 5 PT · 20s</span>
+    <span class="bdg t">🎯 TB · 15s</span>
+  </div>
+  <div class="hdr-actions">
+    <button class="btn g" onclick="resetAll()">↺ Reset Cards</button>
+    <button class="btn p" onclick="goTB()">🎯 Tiebreaker</button>
+    <button class="btn r" onclick="resetScores()">Reset Scores</button>
+  </div>
+</div>
+
+<!-- SCOREBOARD -->
+<div class="scores" id="scores"></div>
+
+<!-- BOARD -->
+<div class="board" id="board"></div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="bgClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-top-bar"></div>
+    <button class="mclose" onclick="closeModal()">✕</button>
+
+    <!-- PHOTO -->
+    <div class="mphoto" id="mphoto">
+      <div class="nophoto">images / [id].jpg</div>
+      <div class="mbadge" id="mbadge">
+        <div class="mbadge-num" id="mnum">#1</div>
+        <div class="mbadge-meta" id="mmeta">1 PT · EASY · 10s</div>
+      </div>
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="mbottom">
+
+      <!-- Timer ring -->
+      <div class="rw" id="rw">
+        <svg width="80" height="80" viewBox="0 0 80 80">
+          <circle class="rbg" cx="40" cy="40" r="33"/>
+          <circle class="rf" id="rf" cx="40" cy="40" r="33"/>
+        </svg>
+        <div class="rn" id="rn">—</div>
+      </div>
+
+      <!-- Status + Answer + PU -->
+      <div class="mmid">
+        <div class="mstatus" id="mstatus">TAP ▶ TO START TIMER</div>
+        <div class="mansbox" id="mansbox">
+          <div class="mans-hint" id="mans-hint">👁 Press Reveal when ready</div>
+          <div class="mans-text" id="mans-text"></div>
+        </div>
+        <div class="mpubanner" id="mpubanner"></div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="mbtns">
+        <button class="btn solid-g" id="bstart" onclick="startTimer()">▶ Start</button>
+        <button class="btn" style="color:var(--tb);border-color:var(--bdr2)" id="breveal" onclick="revealAnswer()">👁 Reveal</button>
+        <button class="btn btn-steal" id="bsteal" onclick="stealCard()">🔄 Steal</button>
+        <button class="btn solid-r" onclick="closeAndMark()">✓ Close & Mark</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ SECRET POWER-UPS ══
+const PU={
+  6: {icon:'💥',label:'DOUBLE POINTS',      desc:'This answer counts for DOUBLE points!'},
+  12:{icon:'➕',label:'+1 TO YOUR TEAM',     desc:'Your team earns +1 bonus point!'},
+  19:{icon:'⏭',label:'SKIP EVERYONE',       desc:'All other teams skip their next turn!'},
+  25:{icon:'💥',label:'DOUBLE POINTS',      desc:'This answer counts for DOUBLE points!'},
+  29:{icon:'➖',label:'−1 CHOSEN TEAM',     desc:'Choose any team — they lose 1 point!'},
+  33:{icon:'🔀',label:'SKIP NEXT OPPONENT', desc:'The next team in rotation loses their turn!'},
+  38:{icon:'💥',label:'DOUBLE POINTS',      desc:'This answer counts for DOUBLE points!'},
+  42:{icon:'➕',label:'+1 TO YOUR TEAM',     desc:'Your team earns +1 bonus point!'},
+  46:{icon:'🔀',label:'SKIP NEXT OPPONENT', desc:'The next team in rotation loses their turn!'},
+  50:{icon:'⏭',label:'SKIP EVERYONE',       desc:'All other teams skip their next turn!'},
+};
+
+const CARDS=[
+  {id:1, pts:1,tier:'e',time:10,answer:'Linux'},
+  {id:2, pts:1,tier:'e',time:10,answer:'Mouse'},
+  {id:3, pts:1,tier:'e',time:10,answer:'Webcam'},
+  {id:4, pts:1,tier:'e',time:10,answer:'DVI'},
+  {id:5, pts:1,tier:'e',time:10,answer:'Monitor'},
+  {id:6, pts:1,tier:'e',time:10,answer:'Printer'},
+  {id:7, pts:1,tier:'e',time:10,answer:'PSU'},
+  {id:8, pts:1,tier:'e',time:10,answer:'Capacitor'},
+  {id:9, pts:1,tier:'e',time:10,answer:'Breadboard'},
+  {id:10,pts:1,tier:'e',time:10,answer:'Fuse'},
+  {id:11,pts:1,tier:'e',time:10,answer:'RAM'},
+  {id:12,pts:1,tier:'e',time:10,answer:'Motherboard'},
+  {id:13,pts:1,tier:'e',time:10,answer:'Python'},
+  {id:14,pts:1,tier:'e',time:10,answer:'HDD'},
+  {id:15,pts:1,tier:'e',time:10,answer:'Bill Gates'},
+  {id:16,pts:1,tier:'e',time:10,answer:'VGA'},
+  {id:17,pts:1,tier:'e',time:10,answer:'CPU'},
+  {id:18,pts:1,tier:'e',time:10,answer:'Ethernet'},
+  {id:19,pts:1,tier:'e',time:10,answer:'Joystick'},
+  {id:20,pts:1,tier:'e',time:10,answer:'AND Gate'},
+  {id:21,pts:3,tier:'a',time:15,answer:'Media Reader'},
+  {id:22,pts:3,tier:'a',time:15,answer:'Docking Station'},
+  {id:23,pts:3,tier:'a',time:15,answer:'DisplayPort'},
+  {id:24,pts:3,tier:'a',time:15,answer:'SATA'},
+  {id:25,pts:3,tier:'a',time:15,answer:'SSD'},
+  {id:26,pts:3,tier:'a',time:15,answer:'Wire Crimper'},
+  {id:27,pts:3,tier:'a',time:15,answer:'Heatsink'},
+  {id:28,pts:3,tier:'a',time:15,answer:'Multimeter'},
+  {id:29,pts:3,tier:'a',time:15,answer:'CMOS'},
+  {id:30,pts:3,tier:'a',time:15,answer:'NIC'},
+  {id:31,pts:3,tier:'a',time:15,answer:'OR Gate'},
+  {id:32,pts:3,tier:'a',time:15,answer:'Microcontroller'},
+  {id:33,pts:3,tier:'a',time:15,answer:'Resistor'},
+  {id:34,pts:3,tier:'a',time:15,answer:'Diode'},
+  {id:35,pts:3,tier:'a',time:15,answer:'Blue Screen of Death'},
+  {id:36,pts:5,tier:'h',time:20,answer:'NVIDIA'},
+  {id:37,pts:5,tier:'h',time:20,answer:'Inductor'},
+  {id:38,pts:5,tier:'h',time:20,answer:'DPST Switch'},
+  {id:39,pts:5,tier:'h',time:20,answer:'Potentiometer'},
+  {id:40,pts:5,tier:'h',time:20,answer:'7-Segment Display'},
+  {id:41,pts:5,tier:'h',time:20,answer:'Thermistor'},
+  {id:42,pts:5,tier:'h',time:20,answer:'Relay'},
+  {id:43,pts:5,tier:'h',time:20,answer:'Grace Hopper'},
+  {id:44,pts:5,tier:'h',time:20,answer:'MOSFET'},
+  {id:45,pts:5,tier:'h',time:20,answer:'Buck Converter'},
+  {id:46,pts:5,tier:'h',time:20,answer:'Alan Turing'},
+  {id:47,pts:5,tier:'h',time:20,answer:'Voltage Regulator'},
+  {id:48,pts:5,tier:'h',time:20,answer:'Ruby'},
+  {id:49,pts:5,tier:'h',time:20,answer:'Rectifier'},
+  {id:50,pts:5,tier:'h',time:20,answer:'Chipset'},
+];
+const TB=[
+  {id:'T1', tier:'t',time:15,answer:'USB Type-C'},
+  {id:'T2', tier:'t',time:15,answer:'Raspberry Pi'},
+  {id:'T3', tier:'t',time:15,answer:'Oscilloscope'},
+  {id:'T4', tier:'t',time:15,answer:'Soldering Iron'},
+  {id:'T5', tier:'t',time:15,answer:'Linus Torvalds'},
+  {id:'T6', tier:'t',time:15,answer:'FPGA'},
+  {id:'T7', tier:'t',time:15,answer:'Logic Analyzer'},
+  {id:'T8', tier:'t',time:15,answer:'Ada Lovelace'},
+  {id:'T9', tier:'t',time:15,answer:'NOR Gate'},
+  {id:'T10',tier:'t',time:15,answer:'Flux Capacitor'},
+];
+
+const TC={e:'#00e5a0',a:'#f5c400',h:'#ff4d6d',t:'#a78bfa'};
+const TL={e:'EASY',a:'AVERAGE',h:'HARD',t:'TIEBREAKER'};
+
+let used=new Set();
+let teams=[
+  {name:'Team 1',score:0},{name:'Team 2',score:0},
+  {name:'Team 3',score:0},{name:'Team 4',score:0}
+];
+let active=null,ticker=null,timeLeft=0,running=false,revealed=false;
+
+/* ── SOUND ── */
+function buzz(){
+  try{
+    const A=new(window.AudioContext||window.webkitAudioContext)();
+    [{f:700,t:0,d:.09,v:.22},{f:520,t:.10,d:.09,v:.18},{f:380,t:.20,d:.13,v:.15},{f:200,t:.35,d:.28,v:.12}]
+    .forEach(({f,t,d,v})=>{
+      const o=A.createOscillator(),g=A.createGain();
+      o.connect(g);g.connect(A.destination);
+      o.type='sawtooth';o.frequency.value=f;
+      g.gain.setValueAtTime(v,A.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(.0001,A.currentTime+t+d);
+      o.start(A.currentTime+t);o.stop(A.currentTime+t+d+.01);
+    });
+  }catch(e){}
+}
+function tick(){
+  try{
+    const A=new(window.AudioContext||window.webkitAudioContext)();
+    const o=A.createOscillator(),g=A.createGain();
+    o.connect(g);g.connect(A.destination);
+    o.type='sine';o.frequency.value=1050;
+    g.gain.setValueAtTime(.06,A.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001,A.currentTime+.06);
+    o.start();o.stop(A.currentTime+.07);
+  }catch(e){}
+}
+
+/* ── SCORES ── */
+function renderScores(){
+  document.getElementById('scores').innerHTML=teams.map((t,i)=>`
+    <div class="tslot">
+      <button class="tadj-btn minus" onclick="adj(${i},-1)">−</button>
+      <div class="tcenter">
+        <div class="tscore" id="ts${i}">${t.score}</div>
+        <input class="tname" value="${t.name}" oninput="teams[${i}].name=this.value" placeholder="TEAM ${i+1}">
+      </div>
+      <button class="tadj-btn plus" onclick="adj(${i},1)">+</button>
+    </div>
+  `).join('');
+}
+
+function adj(i,d){
+  teams[i].score=Math.max(0,teams[i].score+d);
+  const el=document.getElementById(`ts${i}`);
+  el.textContent=teams[i].score;
+  el.classList.remove('score-pop');
+  void el.offsetWidth;
+  el.classList.add('score-pop');
+}
+function resetScores(){
+  if(!confirm('Reset all scores to zero?'))return;
+  teams.forEach((_,i)=>{teams[i].score=0;document.getElementById(`ts${i}`).textContent=0;});
+}
+function resetAll(){
+  if(!confirm('Reset all cards?'))return;
+  used.clear();renderBoard();
+}
+function goTB(){document.getElementById('tb-sec')?.scrollIntoView({behavior:'smooth'});}
+
+/* ── BOARD ── */
+function renderBoard(){
+  const secs=[
+    {tier:'e',pts:'1PT',lbl:'1 Point — Easy (10s)',   cards:CARDS.filter(c=>c.tier==='e')},
+    {tier:'a',pts:'3PT',lbl:'3 Points — Average (15s)',cards:CARDS.filter(c=>c.tier==='a')},
+    {tier:'h',pts:'5PT',lbl:'5 Points — Difficult (20s)',cards:CARDS.filter(c=>c.tier==='h')},
+  ];
+  let html=secs.map(s=>`
+    <div class="sec">
+      <div class="sec-hd">
+        <div class="sec-pts ${s.tier}">${s.pts}</div>
+        <div class="sec-lbl">${s.lbl}</div>
+        <div class="sec-line"></div>
+      </div>
+      <div class="cards">${s.cards.map(cH).join('')}</div>
+    </div>`).join('');
+  html+=`
+    <div class="sec" id="tb-sec">
+      <div class="sec-hd">
+        <div class="sec-pts t">TB</div>
+        <div class="sec-lbl">Tiebreaker Round — (15s)</div>
+        <div class="sec-line"></div>
+      </div>
+      <div class="cards">${TB.map(cH).join('')}</div>
+    </div>`;
+  document.getElementById('board').innerHTML=html;
+}
+function cH(c){
+  const u=used.has(c.id);
+  const pl=typeof c.pts==='number'?`${c.pts}PT`:'TB';
+  return `<div class="card ${c.tier}${u?' used':''}" id="card-${c.id}" onclick="openCard('${c.id}')">
+    <div class="cnum">${c.id}</div>
+    <div class="cpt">${pl}</div>
+    <div class="ctr">${TL[c.tier]||'TB'}</div>
+  </div>`;
+}
+
+/* ── MODAL ── */
+function fCard(id){
+  const n=isNaN(id)?id:Number(id);
+  return CARDS.find(c=>c.id===n)||TB.find(c=>c.id===id);
+}
+
+function openCard(id){
+  stopTimer();revealed=false;
+  active=fCard(id);if(!active)return;
+  const c=active,col=TC[c.tier];
+
+  // apply color
+  const m=document.getElementById('modal');
+  m.style.setProperty('--mc',col);
+
+  // badge
+  document.getElementById('mnum').textContent=typeof c.id==='string'?c.id:`#${c.id}`;
+  document.getElementById('mnum').style.color=col;
+  const pts=typeof c.pts==='number'?`${c.pts} PT${c.pts>1?'S':''} · `:'';
+  document.getElementById('mmeta').textContent=`${pts}${TL[c.tier]} · ${c.time}s`;
+
+  // photo
+  const ph=document.getElementById('mphoto');
+  const badge=document.getElementById('mbadge');
+  // remove old img if any
+  ph.querySelectorAll('img,.nophoto').forEach(e=>e.remove());
+  const img=document.createElement('img');
+  img.src=`images/${c.id}.jpg`;
+  img.alt=c.answer;
+  img.onerror=function(){
+    this.remove();
+    const np=document.createElement('div');np.className='nophoto';
+    np.textContent=`images/${c.id}.jpg`;
+    ph.insertBefore(np,badge);
+  };
+  ph.insertBefore(img,badge);
+
+  // timer reset
+  timeLeft=c.time;running=false;
+  ring(c.time,c.time,col);
+  document.getElementById('rn').textContent=c.time;
+  document.getElementById('rn').style.color=col;
+  document.getElementById('rw').classList.remove('tu');
+  setStatus('TAP ▶ TO START TIMER',false);
+
+  // answer
+  document.getElementById('mans-text').style.display='none';
+  document.getElementById('mans-text').textContent=c.answer;
+  document.getElementById('mans-hint').style.display='block';
+  document.getElementById('mansbox').classList.remove('revealed');
+  document.getElementById('mpubanner').style.display='none';
+
+  // btns
+  document.getElementById('bstart').textContent='▶ Start';
+  document.getElementById('bstart').disabled=false;
+
+  document.getElementById('overlay').classList.add('on');
+}
+
+function ring(cur,total,colorOv){
+  const r=33,circ=2*Math.PI*r;
+  const f=document.getElementById('rf');
+  f.style.strokeDasharray=circ;
+  f.style.strokeDashoffset=circ*(1-cur/total);
+  const pct=cur/total;
+  if(colorOv){f.style.stroke=colorOv;f.style.filter=`drop-shadow(0 0 4px ${colorOv})`;}
+  else if(pct>.5){f.style.stroke='var(--mc)';f.style.filter='drop-shadow(0 0 4px var(--mc))';}
+  else if(pct>.25){f.style.stroke='#f5c400';f.style.filter='drop-shadow(0 0 4px #f5c400)';}
+  else{f.style.stroke='#ff4d6d';f.style.filter='drop-shadow(0 0 6px #ff4d6d)';}
+}
+
+function setStatus(txt,alert){
+  const el=document.getElementById('mstatus');
+  el.textContent=txt;
+  el.className='mstatus'+(alert?' alert':'');
+}
+
+function startTimer(){
+  if(running)return;
+  if(timeLeft<=0)timeLeft=active.time;
+  running=true;
+  document.getElementById('bstart').textContent='⏳ Running…';
+  document.getElementById('bstart').disabled=true;
+  const total=active.time;
+  ticker=setInterval(()=>{
+    timeLeft--;
+    if(timeLeft<=3&&timeLeft>0)tick();
+    document.getElementById('rn').textContent=timeLeft;
+    ring(timeLeft,total,null);
+    if(timeLeft<=0){
+      clearInterval(ticker);running=false;
+      document.getElementById('rn').textContent='0';
+      document.getElementById('rw').classList.add('tu');
+      setStatus("⏰ TIME'S UP!",true);
+      buzz();
+      const f=document.createElement('div');f.className='tuflash';
+      document.body.appendChild(f);
+      setTimeout(()=>f.remove(),1000);
+    }
+  },1000);
+}
+function stopTimer(){clearInterval(ticker);running=false;}
+
+function revealAnswer(){
+  if(revealed)return;revealed=true;stopTimer();
+  document.getElementById('mans-hint').style.display='none';
+  document.getElementById('mans-text').style.display='block';
+  document.getElementById('mansbox').classList.add('revealed');
+  const pu=PU[active?.id];
+  if(pu){
+    const b=document.getElementById('mpubanner');
+    b.innerHTML=`${pu.icon} POWER-UP: ${pu.label} — ${pu.desc}`;
+    b.style.display='block';
+  }
+  // subtle reveal flash
+  const f=document.createElement('div');f.className='ans-reveal-flash';
+  document.body.appendChild(f);setTimeout(()=>f.remove(),600);
+}
+
+function stealCard(){
+  if(!active)return;
+  // stop current timer, show steal flash, restart timer fresh
+  stopTimer();
+  revealed=false;
+  document.getElementById('mans-hint').style.display='block';
+  document.getElementById('mans-text').style.display='none';
+  document.getElementById('mansbox').classList.remove('revealed');
+  document.getElementById('mpubanner').style.display='none';
+  document.getElementById('rw').classList.remove('tu');
+  const col=TC[active.tier];
+  timeLeft=active.time;
+  ring(active.time,active.time,col);
+  document.getElementById('rn').textContent=active.time;
+  document.getElementById('rn').style.color=col;
+  setStatus('🔄 STOLEN — NEW TIMER',false);
+  document.getElementById('bstart').textContent='▶ Start';
+  document.getElementById('bstart').disabled=false;
+  // auto-start timer immediately
+  startTimer();
+  // steal flash — orange burst
+  const f=document.createElement('div');
+  f.style.cssText='position:fixed;inset:0;z-index:800;pointer-events:none;background:radial-gradient(ellipse at center,rgba(255,107,53,.3) 0%,transparent 65%);animation:tuf .7s ease forwards;';
+  document.body.appendChild(f);setTimeout(()=>f.remove(),800);
+}
+function closeAndMark(){
+  if(!revealed)revealAnswer();
+  if(!active)return;
+  used.add(active.id);
+  document.getElementById(`card-${active.id}`)?.classList.add('used');
+  stopTimer();
+  document.getElementById('overlay').classList.remove('on');
+  document.getElementById('rw').classList.remove('tu');
+  active=null;
+}
+function closeModal(){
+  stopTimer();
+  document.getElementById('overlay').classList.remove('on');
+  document.getElementById('rw').classList.remove('tu');
+  active=null;
+}
+function bgClick(e){if(e.target===document.getElementById('overlay'))closeModal();}
+
+renderScores();
+renderBoard();
+</script>
+</body>
+</html>
