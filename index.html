@@ -226,14 +226,7 @@ body::before{
 }
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-.mclose{
-  position:absolute;top:12px;right:12px;z-index:20;
-  background:var(--bdr);border:1px solid var(--bdr2);color:var(--dim);
-  width:30px;height:30px;border-radius:50%;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:13px;
-  transition:all .15s;
-}
-.mclose:hover{background:var(--hard);color:#fff;border-color:var(--hard);transform:rotate(90deg);}
+
 
 .mphoto{
   flex:1;min-height:0;background:var(--bg);
@@ -291,6 +284,8 @@ body::before{
 
 .mbtns{display:flex;flex-direction:column;gap:6px;min-width:116px;}
 .mbtns .btn{padding:8px 12px;font-size:10px;letter-spacing:2px;text-align:center;border-radius:8px;width:100%;}
+#bstart{padding:14px 12px;font-size:12px;letter-spacing:3px;box-shadow:0 4px 16px rgba(0,229,160,.25);}
+.mbtns-divider{height:1px;background:var(--bdr2);margin:4px 0;}
 .btn-steal{color:#f5c400;border-color:rgba(245,196,0,.3);}
 .btn-steal:hover{background:rgba(245,196,0,.1);border-color:#f5c400;box-shadow:0 0 16px rgba(245,196,0,.2);}
 
@@ -319,9 +314,9 @@ body::before{
   <div class="logo">FLASH POP</div>
   <div class="hdiv"></div>
   <div class="badges">
-    <span class="bdg e" onmouseenter="sfx('hover')">⚡ 1 PT · 10s</span>
-    <span class="bdg a" onmouseenter="sfx('hover')">🔥 3 PT · 15s</span>
-    <span class="bdg h" onmouseenter="sfx('hover')">💀 5 PT · 20s</span>
+    <span class="bdg e" onmouseenter="sfx('hover')">⚡ 1 PT · 5s</span>
+    <span class="bdg a" onmouseenter="sfx('hover')">🔥 3 PT · 7s</span>
+    <span class="bdg h" onmouseenter="sfx('hover')">💀 5 PT · 10s</span>
     <span class="bdg t" onmouseenter="sfx('hover')">🎯 TB · 15s</span>
   </div>
   <div class="hdr-actions">
@@ -353,7 +348,7 @@ body::before{
 <div class="overlay" id="overlay" onclick="bgClick(event)">
   <div class="modal" id="modal">
     <div class="modal-top-bar"></div>
-    <button class="mclose" onclick="sfx('close');closeModal()">✕</button>
+
 
     <div class="mphoto" id="mphoto">
       <div class="nophoto">images / [id].jpg</div>
@@ -383,6 +378,7 @@ body::before{
 
       <div class="mbtns">
         <button class="btn solid-g" id="bstart" onclick="sfx('start');startTimer()">▶ Start</button>
+        <div class="mbtns-divider"></div>
         <button class="btn" style="color:var(--tb);border-color:var(--bdr2)" id="breveal" onclick="revealAnswer()">👁 Reveal</button>
         <button class="btn btn-steal" id="bsteal" onclick="stealCard()">🔄 Steal</button>
         <button class="btn solid-r" onclick="sfx('close');closeAndMark()">✓ Close & Mark</button>
@@ -730,56 +726,56 @@ const PU={
 };
 
 const CARDS=[
-  {id:1, pts:1,tier:'e',time:10,answer:'Linux'},
-  {id:2, pts:1,tier:'e',time:10,answer:'Mouse'},
-  {id:3, pts:1,tier:'e',time:10,answer:'Webcam'},
-  {id:4, pts:1,tier:'e',time:10,answer:'Digital Visual Interface'},
-  {id:5, pts:1,tier:'e',time:10,answer:'Monitor'},
-  {id:6, pts:1,tier:'e',time:10,answer:'Printer'},
-  {id:7, pts:1,tier:'e',time:10,answer:'Power Supply'},
-  {id:8, pts:1,tier:'e',time:10,answer:'Capacitor'},
-  {id:9, pts:1,tier:'e',time:10,answer:'Breadboard'},
-  {id:10,pts:1,tier:'e',time:10,answer:'Fuse'},
-  {id:11,pts:1,tier:'e',time:10,answer:'Random Access Memory'},
-  {id:12,pts:1,tier:'e',time:10,answer:'Motherboard'},
-  {id:13,pts:1,tier:'e',time:10,answer:'Python'},
-  {id:14,pts:1,tier:'e',time:10,answer:'Hard Disk Drive'},
-  {id:15,pts:1,tier:'e',time:10,answer:'Bill Gates'},
-  {id:16,pts:1,tier:'e',time:10,answer:'Video Graphics Array'},
-  {id:17,pts:1,tier:'e',time:10,answer:'Central Processing Unit'},
-  {id:18,pts:1,tier:'e',time:10,answer:'Ethernet'},
-  {id:19,pts:1,tier:'e',time:10,answer:'Joystick'},
-  {id:20,pts:1,tier:'e',time:10,answer:'AND Gate'},
-  {id:21,pts:3,tier:'a',time:15,answer:'Media Reader'},
-  {id:22,pts:3,tier:'a',time:15,answer:'Docking Station'},
-  {id:23,pts:3,tier:'a',time:15,answer:'DisplayPort'},
-  {id:24,pts:3,tier:'a',time:15,answer:'Serial Advanced Technology Attachment Port'},
-  {id:25,pts:3,tier:'a',time:15,answer:'Solid State Drive'},
-  {id:26,pts:3,tier:'a',time:15,answer:'Wire Crimper'},
-  {id:27,pts:3,tier:'a',time:15,answer:'Heatsink'},
-  {id:28,pts:3,tier:'a',time:15,answer:'Multimeter'},
-  {id:29,pts:3,tier:'a',time:15,answer:'CMOS Battery'},
-  {id:30,pts:3,tier:'a',time:15,answer:'Network Interface Card'},
-  {id:31,pts:3,tier:'a',time:15,answer:'OR Gate'},
-  {id:32,pts:3,tier:'a',time:15,answer:'Microcontroller'},
-  {id:33,pts:3,tier:'a',time:15,answer:'Resistor'},
-  {id:34,pts:3,tier:'a',time:15,answer:'Diode'},
-  {id:35,pts:3,tier:'a',time:15,answer:'Blue Screen of Death'},
-  {id:36,pts:5,tier:'h',time:20,answer:'NVIDIA'},
-  {id:37,pts:5,tier:'h',time:20,answer:'Inductor'},
-  {id:38,pts:5,tier:'h',time:20,answer:'DPST Switch'},
-  {id:39,pts:5,tier:'h',time:20,answer:'Potentiometer'},
-  {id:40,pts:5,tier:'h',time:20,answer:'7-Segment Display'},
-  {id:41,pts:5,tier:'h',time:20,answer:'Thermistor'},
-  {id:42,pts:5,tier:'h',time:20,answer:'Relay'},
-  {id:43,pts:5,tier:'h',time:20,answer:'Grace Hopper'},
-  {id:44,pts:5,tier:'h',time:20,answer:'MOSFET'},
-  {id:45,pts:5,tier:'h',time:20,answer:'Buck Converter'},
-  {id:46,pts:5,tier:'h',time:20,answer:'Alan Turing'},
-  {id:47,pts:5,tier:'h',time:20,answer:'Voltage Regulator'},
-  {id:48,pts:5,tier:'h',time:20,answer:'Ruby'},
-  {id:49,pts:5,tier:'h',time:20,answer:'Rectifier'},
-  {id:50,pts:5,tier:'h',time:20,answer:'Chipset'},
+  {id:1, pts:1,tier:'e',time:5,answer:'Linux'},
+  {id:2, pts:1,tier:'e',time:5,answer:'Mouse'},
+  {id:3, pts:1,tier:'e',time:5,answer:'Webcam'},
+  {id:4, pts:1,tier:'e',time:5,answer:'Digital Visual Interface'},
+  {id:5, pts:1,tier:'e',time:5,answer:'Monitor'},
+  {id:6, pts:1,tier:'e',time:5,answer:'Printer'},
+  {id:7, pts:1,tier:'e',time:5,answer:'Power Supply'},
+  {id:8, pts:1,tier:'e',time:5,answer:'Capacitor'},
+  {id:9, pts:1,tier:'e',time:5,answer:'Breadboard'},
+  {id:10,pts:1,tier:'e',time:5,answer:'Fuse'},
+  {id:11,pts:1,tier:'e',time:5,answer:'Random Access Memory'},
+  {id:12,pts:1,tier:'e',time:5,answer:'Motherboard'},
+  {id:13,pts:1,tier:'e',time:5,answer:'Python'},
+  {id:14,pts:1,tier:'e',time:5,answer:'Hard Disk Drive'},
+  {id:15,pts:1,tier:'e',time:5,answer:'Bill Gates'},
+  {id:16,pts:1,tier:'e',time:5,answer:'Video Graphics Array'},
+  {id:17,pts:1,tier:'e',time:5,answer:'Central Processing Unit'},
+  {id:18,pts:1,tier:'e',time:5,answer:'Ethernet'},
+  {id:19,pts:1,tier:'e',time:5,answer:'Joystick'},
+  {id:20,pts:1,tier:'e',time:5,answer:'AND Gate'},
+  {id:21,pts:3,tier:'a',time:7,answer:'Media Reader'},
+  {id:22,pts:3,tier:'a',time:7,answer:'Docking Station'},
+  {id:23,pts:3,tier:'a',time:7,answer:'DisplayPort'},
+  {id:24,pts:3,tier:'a',time:7,answer:'Serial Advanced Technology Attachment Port'},
+  {id:25,pts:3,tier:'a',time:7,answer:'Solid State Drive'},
+  {id:26,pts:3,tier:'a',time:7,answer:'Wire Crimper'},
+  {id:27,pts:3,tier:'a',time:7,answer:'Heatsink'},
+  {id:28,pts:3,tier:'a',time:7,answer:'Multimeter'},
+  {id:29,pts:3,tier:'a',time:7,answer:'CMOS Battery'},
+  {id:30,pts:3,tier:'a',time:7,answer:'Network Interface Card'},
+  {id:31,pts:3,tier:'a',time:7,answer:'OR Gate'},
+  {id:32,pts:3,tier:'a',time:7,answer:'Microcontroller'},
+  {id:33,pts:3,tier:'a',time:7,answer:'Resistor'},
+  {id:34,pts:3,tier:'a',time:7,answer:'Diode'},
+  {id:35,pts:3,tier:'a',time:7,answer:'Blue Screen of Death'},
+  {id:36,pts:5,tier:'h',time:10,answer:'NVIDIA'},
+  {id:37,pts:5,tier:'h',time:10,answer:'Inductor'},
+  {id:38,pts:5,tier:'h',time:10,answer:'DPST Switch'},
+  {id:39,pts:5,tier:'h',time:10,answer:'Potentiometer'},
+  {id:40,pts:5,tier:'h',time:10,answer:'7-Segment Display'},
+  {id:41,pts:5,tier:'h',time:10,answer:'Thermistor'},
+  {id:42,pts:5,tier:'h',time:10,answer:'Relay'},
+  {id:43,pts:5,tier:'h',time:10,answer:'Grace Hopper'},
+  {id:44,pts:5,tier:'h',time:10,answer:'MOSFET'},
+  {id:45,pts:5,tier:'h',time:10,answer:'Buck Converter'},
+  {id:46,pts:5,tier:'h',time:10,answer:'Alan Turing'},
+  {id:47,pts:5,tier:'h',time:10,answer:'Voltage Regulator'},
+  {id:48,pts:5,tier:'h',time:10,answer:'Ruby'},
+  {id:49,pts:5,tier:'h',time:10,answer:'Rectifier'},
+  {id:50,pts:5,tier:'h',time:10,answer:'Chipset'},
 ];
 const TB=[
   {id:'T1', tier:'t',time:15,answer:'USB Type-C'},
@@ -845,9 +841,9 @@ function goTB(){
 /* ── BOARD ── */
 function renderBoard(){
   const secs=[
-    {tier:'e',pts:'1PT',lbl:'1 Point — Easy (10s)',   cards:CARDS.filter(c=>c.tier==='e')},
-    {tier:'a',pts:'3PT',lbl:'3 Points — Average (15s)',cards:CARDS.filter(c=>c.tier==='a')},
-    {tier:'h',pts:'5PT',lbl:'5 Points — Difficult (20s)',cards:CARDS.filter(c=>c.tier==='h')},
+    {tier:'e',pts:'1PT',lbl:'1 Point — Easy (5s)',   cards:CARDS.filter(c=>c.tier==='e')},
+    {tier:'a',pts:'3PT',lbl:'3 Points — Average (7s)',cards:CARDS.filter(c=>c.tier==='a')},
+    {tier:'h',pts:'5PT',lbl:'5 Points — Difficult (10s)',cards:CARDS.filter(c=>c.tier==='h')},
   ];
   let html=secs.map(s=>`
     <div class="sec">
